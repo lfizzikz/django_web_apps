@@ -1,0 +1,31 @@
+{% extends "todo/layout.html" %}
+
+{% block script %}
+{% endblock %}
+ {% block body %} 
+  {% if tasks %}
+    {% for task in tasks %}
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{ task.title }}</h5>
+            {% if task.details %}
+              <p class="card-text">{{ task.details }}</p>
+            {% endif %}
+            {% if task.is_done %}
+              <form method="post" action="{% url 'todo:toggle' task.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-success" id="complete">Completed</button>
+              </form>
+            {% else %}
+              <form method="post" action="{% url 'todo:toggle' task.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-info" id="not_complete">Click to Complete</button>
+              </form>
+            {% endif %}
+              
+        </div>
+      </div>
+
+    {% endfor %}
+  {% endif %}
+{% endblock %}
