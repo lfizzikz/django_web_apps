@@ -18,3 +18,7 @@ def toggle(request, task_id):
     task_action.save(update_fields=["is_done", "completed_at"])
 
     return redirect("todo:index")
+
+def add(request):
+    return render(request, "todo/add.html")
+
