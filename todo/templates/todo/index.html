@@ -25,6 +25,9 @@
             {% if task.details %}
               <p class="card-text">{{ task.details }}</p>
             {% endif %}
+            {% if task.due_date %}
+              <p class="card-text">{{ task.due_date }}</p>
+            {% endif %}
             {% if task.is_done %}
               <form method="post" action="{% url 'todo:toggle' task.id %}">
                 {% csrf_token %}
@@ -50,8 +53,8 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
-        <form class="w-100">
-
+        <form class="w-100" action="{% url 'todo:add' %}" method="post">
+          {% csrf_token %}
           <div class="modal-body">
             <div class="form-group mb-3">
               <label for="task-title" class="form-label">Task Name:</label>
@@ -62,6 +65,11 @@
           <div class="form-group mb-3 mx-3">
             <label for="task_description" class="form-label">Description:</label>
             <textarea rows="3" class="form-control" id="task_description" name="description"></textarea>
+          </div>
+
+          <div class="mb-3 mx-3">
+            <label for="due-date" class="form-label">Due Date</label>
+            <input type="date" name="due-date" id="due-date" class="form-control">
           </div>
 
           <div class="modal-footer">

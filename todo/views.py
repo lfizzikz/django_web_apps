@@ -20,5 +20,15 @@ def toggle(request, task_id):
     return redirect("todo:index")
 
 def add(request):
-    return render(request, "todo/add.html")
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description", "")
+        due_date = request.POST.get("due-date", "")
+        new_task = Tasks.objects.create(title=title, details=description, due_date=due_date)
+        new_task.save()
+
+        return redirect("todo:index")
+
+
+
 
