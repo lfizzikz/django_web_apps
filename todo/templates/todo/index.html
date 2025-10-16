@@ -21,6 +21,7 @@
     {% for task in tasks %}
       <div class="card" style="width: 18rem;">
         <div class="card-body">
+
           <h5 class="card-title">{{ task.title }}</h5>
             {% if task.details %}
               <p class="card-text">{{ task.details }}</p>
@@ -39,12 +40,16 @@
                 <button type="submit" class="btn btn-outline-info" id="not_complete">Click to Complete</button>
               </form>
             {% endif %}
-              
+            <form action="{% url 'todo:delete' task.id %}" method="post">
+                {% csrf_token %}
+              <button type="submit" class="btn btn-danger" id="delete_task">Delete Task</button>
+            </form>
         </div>
       </div>
-
     {% endfor %}
   {% endif %}
+
+
   <div class="modal fade" id="addTaskModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">

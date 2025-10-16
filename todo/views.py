@@ -29,6 +29,12 @@ def add(request):
 
         return redirect("todo:index")
 
+@require_POST
+def delete(request, task_id):
+    task_delete = get_object_or_404(Tasks, pk=task_id)
+    task_delete.delete()
+
+    return redirect("todo:index")
 
 
 
