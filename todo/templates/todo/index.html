@@ -1,54 +1,79 @@
 {% extends "todo/layout.html" %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'todo/css/index.css' %}">
+{% endblock %}
 
 {% block script %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const modalEl = document.getElementById("addTaskModal");
-
     modalEl.addEventListener("shown.bs.modal", function() {
       const input = document.getElementById("task-title");
-      if (input) {
-        input.focus();
-      }
+      if (input) input.focus();
     });
   });
 </script>
 {% endblock %}
 
-{% block body %} 
- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">Add Task</button>
-  {% if tasks %}
-    {% for task in tasks %}
-      <div class="card" style="width: 18rem;">
-        <div class="card-body">
+{% block body %}
+  <header class="app-header">
+    <div class="container py-3 d-flex align-items-center justify-content-between">
+      <h1 class="h4 mb-0 app-title">My Tasks</h1>
+      <button class="btn btn-primary btn-icon" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+        <span>+ Add Task</span>
+      </button>
+    </div>
+  </header>
 
-          <h5 class="card-title">{{ task.title }}</h5>
-            {% if task.details %}
-              <p class="card-text">{{ task.details }}</p>
-            {% endif %}
-            {% if task.due_date %}
-              <p class="card-text">{{ task.due_date }}</p>
-            {% endif %}
-            {% if task.is_done %}
-              <form method="post" action="{% url 'todo:toggle' task.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-success" id="complete">Completed</button>
-              </form>
-            {% else %}
-              <form method="post" action="{% url 'todo:toggle' task.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-info" id="not_complete">Click to Complete</button>
-              </form>
-            {% endif %}
-            <form action="{% url 'todo:delete' task.id %}" method="post">
-                {% csrf_token %}
-              <button type="submit" class="btn btn-danger" id="delete_task">Delete Task</button>
-            </form>
-        </div>
+  <main class="container py-4">
+    {% if tasks %}
+      <div class="tasks-card shadow-sm">
+        <ul class="list-group list-group-flush">
+          {% for task in tasks %}
+            <li class="list-group-item d-flex gap-3 align-items-start task-item {% if task.is_done %}is-done{% endif %}">
+              <div class="status-dot flex-shrink-0 {% if task.is_done %}bg-success{% else %}bg-secondary{% endif %}"></div>
+              <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-start">
+                  <h6 class="mb-1 task-title {% if task.is_done %}text-muted{% endif %}">{{ task.title }}</h6>
+                  {% if task.due_date %}
+                    <span class="badge rounded-pill {% if task.is_done %}badge-soft-success{% else %}badge-soft-warning{% endif %}">{{ task.due_date }}</span>
+                  {% endif %}
+                </div>
+                {% if task.details %}
+                  <div class="text-muted small">{{ task.details }}</div>
+                {% endif %}
+                <div class="task-actions d-flex gap-2 mt-2">
+                  {% if task.is_done %}
+                    <form method="post" action="{% url 'todo:toggle' task.id %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-outline-success btn-sm" id="complete">Completed</button>
+                    </form>
+                  {% else %}
+                    <form method="post" action="{% url 'todo:toggle' task.id %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-outline-primary btn-sm" id="not_complete">Mark Complete</button>
+                    </form>
+                  {% endif %}
+                  <form method="post" action="{% url 'todo:delete' task.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm" id="delete_task">Delete</button>
+                  </form>
+                </div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
       </div>
-    {% endfor %}
-  {% endif %}
-
+    {% else %}
+      <div class="empty-state">
+        <h6 class="mb-1">No tasks yet</h6>
+        <p class="mb-3 small">Add your first task to get started.</p>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addTaskModal">Add Task</button>
+      </div>
+    {% endif %}
+  </main>
 
   <div class="modal fade" id="addTaskModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -62,19 +87,18 @@
           {% csrf_token %}
           <div class="modal-body">
             <div class="form-group mb-3">
-              <label for="task-title" class="form-label">Task Name:</label>
-              <input autofocus type="text" class="form-control" id="task-title" name="title" required>
+              <label for="task-title" class="form-label">Task Name</label>
+              <input autofocus type="text" class="form-control" id="task-title" name="title" placeholder="e.g., Prepare meeting notes" required>
             </div>
-          </div>
-
-          <div class="form-group mb-3 mx-3">
-            <label for="task_description" class="form-label">Description:</label>
-            <textarea rows="3" class="form-control" id="task_description" name="description"></textarea>
-          </div>
-
-          <div class="mb-3 mx-3">
-            <label for="due-date" class="form-label">Due Date</label>
-            <input type="date" name="due-date" id="due-date" class="form-control">
+            <div class="form-group mb-3">
+              <label for="task_description" class="form-label">Description</label>
+              <textarea rows="3" class="form-control" id="task_description" name="description" placeholder="Optional details..."></textarea>
+            </div>
+            <div class="mb-1">
+              <label for="due-date" class="form-label">Due Date</label>
+              <input type="date" name="due-date" id="due-date" class="form-control">
+              <small id="date-error" class="text-danger d-none">Date cannot be before today.</small>
+            </div>
           </div>
 
           <div class="modal-footer">
@@ -82,8 +106,29 @@
             <button type="submit" class="btn btn-primary" action="">Add Task</button>
           </div>
         </form>
-        
       </div>
     </div>
   </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const dateInput = document.getElementById("due-date")
+      const errorText = document.getElementById("date-error");
+
+      dateInput.addEventListener("change", function() {
+        const selected = new Date(this.value);
+        const today = new Date();
+
+        today.setHours(0, 0, 0, 0);
+        selected.setHours(0, 0, 0, 0);
+
+        if (selected < today) {
+          errorText.classList.remove("d-none");
+          this.classList.add("is-invalid");
+        } else {
+          errorText.classList.add("d-none");
+          this.classList.remove("is-invalid");
+        }
+      });
+    });
+  </script>
 {% endblock %}
