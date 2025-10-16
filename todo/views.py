@@ -6,7 +6,7 @@ from django.views.decorators.http import require_POST
 
 # Create your views here.
 def index(request):
-    tasks = Tasks.objects.order_by("-created_at")
+    tasks = Tasks.objects.order_by("is_done", "-created_at")
     task_context = {"tasks": tasks}
     return render(request, "todo/index.html", task_context)
 
