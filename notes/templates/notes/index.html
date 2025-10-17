@@ -1,0 +1,52 @@
+{% extends "notes/layout.html" %}
+
+{% block style %} 
+<style>
+      body {
+        height: 100vh;
+        overflow: hidden;
+      }
+      .sidebar {
+        height: 100vh;
+        overflow-y: auto;
+        background-color: #1f2335;
+        border-right: 1px solid #2b2f44;
+      }
+      .main-content {
+        height: 100vh;
+        overflow-y: auto;
+        background-color: #1a1b26;
+        color: #c0caf5;
+      }
+</style>
+{% endblock %}
+{% block body %} 
+<div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <div class="col-3 col-md-2 sidebar p-3">
+          <h5 class="text-light mb-3">Notes</h5>
+          <ul class="list-group">
+            <li class="list-group-item bg-transparent text-light border-0">Note 1</li>
+            <li class="list-group-item bg-transparent text-light border-0">Note 2</li>
+            <li class="list-group-item bg-transparent text-light border-0">Note 3</li>
+            <li class="list-group-item bg-transparent text-light border-0">Note 4</li>
+            <li class="list-group-item bg-transparent text-light border-0">Note 5</li>
+            <!-- add more to see scroll -->
+          </ul>
+        </div>
+
+        <!-- Main content -->
+        <div class="col-9 col-md-10 main-content p-4">
+          <h2>Main Content</h2>
+          <p>
+            This is where you show your note’s contents, editor, or whatever the user
+            clicked in the sidebar.
+          </p>
+          <p>
+            Add enough paragraphs to see it scroll separately from the left column.
+          </p>
+        </div>
+      </div>
+    </div>
+{% endblock %}
