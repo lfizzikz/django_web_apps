@@ -1,4 +1,5 @@
-from django.shortcuts import get_object_or_404, render
+from datetime import datetime
+from django.shortcuts import get_object_or_404, render, redirect
 from .models import Notes
 
 # Create your views here.
@@ -17,3 +18,15 @@ def index(request):
     }
 
     return render(request, "notes/index.html", context)
+
+def save(request):
+    if request.method == "POST":
+        note_id = request.GET.get("note")
+        if note_id:
+            note_body_action = get_object_or_404(Notes, pk=note_id)
+            note_body = request.POST.get("note_body", "")
+            note_body_action.body = note_body 
+            note_body_action.updated_at = datetime.now()
+            note_body_action.save(update_fields=["body", "updated_at"])
+
+            return redirect("notes:index")
