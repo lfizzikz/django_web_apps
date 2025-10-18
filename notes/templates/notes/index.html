@@ -18,6 +18,20 @@
         background-color: #1a1b26;
         color: #c0caf5;
       }
+      .list-group-item { 
+        background: transparent;
+        color: #c0caf5;
+        border: 0;
+      }
+      .list-group-item.active { 
+      background: #7aa2f7;
+      color: #1a1b26;
+      font-weight: 600;
+      }
+      .empty { 
+      color:#888;
+      font-style: italic; 
+      }
 </style>
 {% endblock %}
 {% block body %} 
@@ -25,28 +39,34 @@
       <div class="row">
         <!-- Sidebar -->
         <div class="col-3 col-md-2 sidebar p-3">
-          <h5 class="text-light mb-3">Notes</h5>
+          <div class="d-flex justify-content-between align-items-center mb-3 mx-2">
+            <a href="{% url 'home:index' %}" class="text-light text-decoration-none"><h3>Home</h3></a>
+            <a href="{% url 'todo:index' %}" class="text-light text-decoration-none"><h3>Todo</h3></a>
+          </div>
+          {% if note_list %}
           <ul class="list-group">
-            <li class="list-group-item bg-transparent text-light border-0">Note 1</li>
-            <li class="list-group-item bg-transparent text-light border-0">Note 2</li>
-            <li class="list-group-item bg-transparent text-light border-0">Note 3</li>
-            <li class="list-group-item bg-transparent text-light border-0">Note 4</li>
-            <li class="list-group-item bg-transparent text-light border-0">Note 5</li>
-            <!-- add more to see scroll -->
+            {% for note in note_list %}
+            <a href="?note={{ note.id }}"
+               class="list-group-item {% if selected_note and selected_note.id == note.id %}active{% endif %}">
+              {{ note.title }}
+            </a>
+            {% endfor %}
           </ul>
+          {% else %}
+          <small>No notes yet.</small>
+          {% endif %}
         </div>
 
         <!-- Main content -->
         <div class="col-9 col-md-10 main-content p-4">
-          <h2>Main Content</h2>
-          <p>
-            This is where you show your note’s contents, editor, or whatever the user
-            clicked in the sidebar.
-          </p>
-          <p>
-            Add enough paragraphs to see it scroll separately from the left column.
-          </p>
+          {% if selected_note %}
+          <h2>{{ selected_note.title }}</h2>
+          <pre class="mb-0" style="white-space:pre-wrap">{{ selected_note.body }}</pre>
+          {% else %}
+          <h2>No note selected</h2>
+          <p class="empty" style="white-space:pre-wrap">Create note first</p>
+          {% endif %}
         </div>
       </div>
-    </div>
-{% endblock %}
+   </div>
+    {% endblock %}
