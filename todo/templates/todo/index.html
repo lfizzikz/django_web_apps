@@ -20,8 +20,11 @@
 {% block body %}
   <header class="app-header">
     <div class="container py-3 d-flex align-items-center justify-content-between">
-      <a href="{% url 'home:index' %}" style="text-decoration: none;" class="app-title"><h3>Home</h3></a>
-      <h1 class="h2 mb-0 app-title">My Tasks</h1>
+      <div class="d-flex align-items-center gap-3"> 
+        <a href="{% url 'home:index' %}" style="text-decoration: none;" class="app-title"><h3>Home</h3></a>
+        <a href="{% url 'notes:index' %}" style="text-decoration: none;" class="app-title"><h3>Notes</h3></a>
+      </div>
+      <h1 class="h1 mb-0 app-title text-center flex-grow-1">My Tasks</h1>
       <button class="btn btn-primary btn-icon" data-bs-toggle="modal" data-bs-target="#addTaskModal">
         <span>+ Add Task</span>
       </button>
