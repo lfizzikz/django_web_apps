@@ -23,7 +23,15 @@ def add(request):
     if request.method == "POST":
         title = request.POST.get("title")
         description = request.POST.get("description", "")
-        due_date = request.POST.get("due-date", "")
+        due_date_str = request.POST.get("due-date", "")
+
+        due_date = None
+
+        if due_date_str:
+            try:
+                due_date = datetime.fromisoformat(due_date_str).date()
+            except ValueError:
+                due_date = None
         new_task = Tasks.objects.create(title=title, details=description, due_date=due_date)
         new_task.save()
 

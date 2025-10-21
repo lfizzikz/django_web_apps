@@ -121,13 +121,13 @@
       const errorText = document.getElementById("date-error");
 
       dateInput.addEventListener("change", function() {
-        const selected = new Date(this.value);
+        const [y, m, d] = this.value.split("-").map(Number);
+        const selected = new Date(y, m - 1, d);
         const today = new Date();
 
         today.setHours(0, 0, 0, 0);
-        selected.setHours(0, 0, 0, 0);
 
-        if (selected < today) {
+        if (selected.getTime() < today.getTime()) {
           errorText.classList.remove("d-none");
           this.classList.add("is-invalid");
         } else {
@@ -135,7 +135,6 @@
           this.classList.remove("is-invalid");
         }
       });
-      // Simple client-side filter
       const chips = document.querySelectorAll('.chip');
       const items = document.querySelectorAll('.task-item');
       chips.forEach(chip => {
