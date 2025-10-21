@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
 from .models import Notes
 
 # Create your views here.
@@ -23,10 +24,20 @@ def save(request):
     if request.method == "POST":
         note_id = request.GET.get("note")
         if note_id:
-            note_body_action = get_object_or_404(Notes, pk=note_id)
+            note_action = get_object_or_404(Notes, pk=note_id)
             note_body = request.POST.get("note_body", "")
-            note_body_action.body = note_body 
-            note_body_action.updated_at = datetime.now()
-            note_body_action.save(update_fields=["body", "updated_at"])
+            note_title = request.POST.get("note_title", "")
+            note_action.body = note_body 
+            note_action.title = note_title
+            note_action.updated_at = datetime.now()
+            note_action.save(update_fields=["body", "updated_at", "title"])
 
             return redirect("notes:index")
+
+
+def new_note(request):
+    if request.method == "POST":
+        new_note = Notes.objects.create(title="", body="", created_at=datetime.now())
+
+        return redirect(f"{reverse('notes:index')}?note={new_note.pk}")
+

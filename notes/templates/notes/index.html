@@ -2,36 +2,58 @@
 
 {% block style %} 
 <style>
-      body {
-        height: 100vh;
-        overflow: hidden;
+      /* Dracula palette */
+      :root {
+        --bg: #282a36;
+        --surface: #2b2e3b;
+        --surface-2: #1f2130;
+        --border: #3b3f51;
+        --text: #f8f8f2;
+        --muted: #bdc2d1;
+        --subtle: #6272a4;
+        --purple: #bd93f9;
+        --green: #50fa7b;
+        --orange: #ffb86c;
+        --red: #ff5555;
       }
-      .sidebar {
-        height: 100vh;
-        overflow-y: auto;
-        background-color: #1f2335;
-        border-right: 1px solid #2b2f44;
+      body { height: 100vh; overflow: hidden; background: var(--bg); color: var(--text); }
+      .sidebar { height: 100vh; overflow-y: auto; background-color: var(--surface); border-right: 1px solid var(--border); }
+      .main-content { height: 100vh; overflow-y: auto; background-color: var(--bg); color: var(--text); }
+      .list-group-item { background: transparent; color: var(--text); border: 0; }
+      .list-group-item.active { background: var(--purple); color: #1b1c24; font-weight: 600; }
+      .empty { color: var(--subtle); font-style: italic; }
+      .btn-info { background-color: var(--orange); border-color: var(--orange); color: #1b1c24; }
+      .btn-info:hover { filter: brightness(1.05); }
+      .btn-success { background-color: var(--green); border-color: var(--green); color: #0f1320; }
+      .btn-success:hover { filter: brightness(1.05); }
+      a { color: var(--text); }
+      a:hover { color: var(--purple); }
+      .form-control { background: var(--surface-2) !important; color: var(--text) !important; border-color: var(--border) !important; }
+      .form-control:focus { border-color: var(--purple) !important; box-shadow: 0 0 0 .25rem rgba(189,147,249,.18) !important; }
+
+      /* Title input when note has no title */
+      #note_title {
+        display: inline-block;
+        background: var(--surface-2);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        height: 40px;
+        padding: 0 12px;
+        outline: none;
+        min-width: 280px;
       }
-      .main-content {
-        height: 100vh;
-        overflow-y: auto;
-        background-color: #1a1b26;
-        color: #c0caf5;
-      }
-      .list-group-item { 
-        background: transparent;
-        color: #c0caf5;
-        border: 0;
-      }
-      .list-group-item.active { 
-      background: #7aa2f7;
-      color: #1a1b26;
-      font-weight: 600;
-      }
-      .empty { 
-      color:#888;
-      font-style: italic; 
-      }
+      #note_title::placeholder { color: var(--subtle); }
+      #note_title:focus { border-color: var(--purple); box-shadow: 0 0 0 .25rem rgba(189,147,249,.18); }
+
+      /* Toolbar spacing */
+      .btn-toolbar { gap: 8px; }
+      .btn-group .btn { height: 36px; border-radius: 10px; }
+
+      /* Scrollbar subtle styling */
+      .sidebar::-webkit-scrollbar, .main-content::-webkit-scrollbar { width: 10px; }
+      .sidebar::-webkit-scrollbar-thumb, .main-content::-webkit-scrollbar-thumb { background: #3b3f51; border-radius: 10px; }
+      .sidebar::-webkit-scrollbar-track, .main-content::-webkit-scrollbar-track { background: #2b2e3b; }
 </style>
 {% endblock %}
 {% block body %} 
@@ -61,15 +83,23 @@
         <div class="col-9 col-md-10 main-content p-4 d-flex flex-column vh-100">
           {% if selected_note %}
           <div class="d-flex justify-content-between align-items-center mb-3">
+            {% if selected_note.title %}
             <h2 class="mb-0">{{ selected_note.title }}</h2>
+            {% else %}
+            <form action="{% url 'notes:save' %}?note={{ selected_note.id }}" id="save_form" method="post">
+            {% csrf_token %}
+            <input type="text" id="note_title" class="mb-0" name="note_title" value="">
+            </form>
+            {% endif %}
               <div class="btn-toolbar">
                 <div class="btn-group mx-2">
-                  <button type="submit" class="btn btn-info">New Note</button>
+                  <form action="{% url 'notes:new_note' %}" id="new_form" method="post">
+                    {% csrf_token %}
+                    <button type="submit" form="new_form" class="btn btn-info">New Note</button>
+                  </form>
                 </div>
                 <div class="btn-group mx-2">
-                  <form action="{% url 'notes:save' %}?note={{ selected_note.id }}" method="post">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-success">Save</button>
+                  <button type="submit" class="btn btn-success" form="save_form">Save</button>
                 </div>
               </div>
           </div>
@@ -77,10 +107,6 @@
             id="note_body" rows="" cols=""name="note_body">
             {{ selected_note.body}}
           </textarea>
-            </form>
-          {% else %}
-          <h2>No note selected</h2>
-          <p class="empty" style="white-space:pre-wrap">Create note first</p>
           {% endif %}
         </div>
       </div>
