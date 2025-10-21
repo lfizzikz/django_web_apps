@@ -43,6 +43,8 @@
   .list-group-item.task-item:hover {
     background-color: var(--surface-2);
   }
+  .list-group-item.task-item { transition: background-color .15s ease, transform .08s ease; }
+  .list-group-item.task-item:active { transform: scale(.997); }
   .status-dot {
     width: 12px;
     height: 12px;
@@ -93,3 +95,9 @@
   /* Modal polish */
   .modal-header { border-bottom-color: var(--border); }
   .modal-footer { border-top-color: var(--border); }
+
+  /* Filter chips */
+  .filter-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .chip { cursor: pointer; user-select: none; padding: 6px 12px; border-radius: 999px; font-size: 13px; border: 1px solid var(--border); color: var(--muted); background: var(--surface-2); }
+  .chip:hover { color: var(--text); border-color: #4a4f66; }
+  .chip.active { color: #1b1c24; background: var(--purple); border-color: var(--purple); }
