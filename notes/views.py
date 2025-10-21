@@ -22,17 +22,22 @@ def index(request):
 
 def save(request):
     if request.method == "POST":
+        action = request.POST.get("action", "save")
         note_id = request.GET.get("note")
-        if note_id:
-            note_action = get_object_or_404(Notes, pk=note_id)
-            note_body = request.POST.get("note_body", "")
-            note_title = request.POST.get("note_title", "")
-            note_action.body = note_body 
-            note_action.title = note_title
-            note_action.updated_at = datetime.now()
-            note_action.save(update_fields=["body", "updated_at", "title"])
-
+        if not note_id:
             return redirect("notes:index")
+        note_action = get_object_or_404(Notes, pk=note_id)
+        if action == "delete":
+            note_action.delete()
+            return redirect("notes:index")
+        note_body = request.POST.get("note_body", "")
+        note_title = request.POST.get("note_title", "")
+        note_action.body = note_body 
+        note_action.title = note_title
+        note_action.updated_at = datetime.now()
+        note_action.save(update_fields=["body", "updated_at", "title"])
+
+        return redirect("notes:index")
 
 
 def new_note(request):
@@ -40,4 +45,3 @@ def new_note(request):
         new_note = Notes.objects.create(title="", body="", created_at=datetime.now())
 
         return redirect(f"{reverse('notes:index')}?note={new_note.pk}")
-
