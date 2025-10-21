@@ -1,0 +1,108 @@
+:root {
+  --bg: #282a36;
+  --surface: #2b2e3b;
+  --surface-2: #1f2130;
+  --border: #3b3f51;
+  --text: #f8f8f2;
+  --muted: #bdc2d1;
+  --subtle: #6272a4;
+  --purple: #bd93f9;
+  --green: #50fa7b;
+  --orange: #ffb86c;
+  --red: #ff5555;
+}
+body { height: 100vh; overflow: hidden; background: var(--bg); color: var(--text); }
+.sidebar { height: 100vh; overflow-y: auto; background-color: var(--surface); border-right: 1px solid var(--border); }
+.main-content { height: 100vh; overflow-y: auto; background-color: var(--bg); color: var(--text); }
+.list-group-item { background: transparent; color: var(--text); border: 0; }
+.list-group-item.active { background: var(--purple); color: #1b1c24; font-weight: 600; }
+.empty { color: var(--subtle); font-style: italic; }
+.btn-info { background-color: var(--orange); border-color: var(--orange); color: #1b1c24; }
+.btn-info:hover { filter: brightness(1.05); }
+.btn-success { background-color: var(--green); border-color: var(--green); color: #0f1320; }
+.btn-success:hover { filter: brightness(1.05); }
+a { color: var(--text); }
+a:hover { color: var(--purple); }
+.form-control { background: var(--surface-2) !important; color: var(--text) !important; border-color: var(--border) !important; }
+.form-control:focus { border-color: var(--purple) !important; box-shadow: 0 0 0 .25rem rgba(189,147,249,.18) !important; }
+
+#note_title {
+  display: inline-block;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  height: 40px;
+  padding: 0 12px;
+  outline: none;
+  min-width: 280px;
+}
+#note_title::placeholder { color: var(--subtle); }
+#note_title:focus { border-color: var(--purple); box-shadow: 0 0 0 .25rem rgba(189,147,249,.18); }
+
+.btn-toolbar { gap: 8px; }
+.btn-group .btn { height: 36px; border-radius: 10px; }
+
+.sidebar::-webkit-scrollbar, .main-content::-webkit-scrollbar { width: 10px; }
+.sidebar::-webkit-scrollbar-thumb, .main-content::-webkit-scrollbar-thumb { background: #3b3f51; border-radius: 10px; }
+.sidebar::-webkit-scrollbar-track, .main-content::-webkit-scrollbar-track { background: #2b2e3b; }
+.sidebar h3 { font-size: 18px; margin: 0; }
+.sidebar a { opacity: .95; }
+.sidebar a:hover { color: var(--purple); }
+.btn-info, .btn-success { border-radius: 10px; }
+.list-group-item { border-radius: 8px; margin: 2px 4px; }
+.list-group-item.active { border: 1px solid rgba(27,28,36,.4); }
+
+.EasyMDEContainer {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.EasyMDEContainer .editor-toolbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.EasyMDEContainer .editor-toolbar a,
+.EasyMDEContainer .editor-toolbar button {
+  color: var(--muted);
+}
+.EasyMDEContainer .editor-toolbar a:hover,
+.EasyMDEContainer .editor-toolbar button:hover {
+  color: var(--text);
+  background: rgba(189,147,249,.12);
+}
+.EasyMDEContainer .editor-toolbar a.active,
+.EasyMDEContainer .editor-toolbar button.active {
+  color: #1b1c24;
+  background: var(--purple);
+  border-color: var(--purple);
+}
+.EasyMDEContainer .CodeMirror,
+.EasyMDEContainer .CodeMirror-scroll {
+  background: var(--surface-2);
+  color: var(--text);
+}
+.EasyMDEContainer .CodeMirror pre { color: var(--text); }
+.EasyMDEContainer .CodeMirror-cursor { border-left: 1px solid var(--text); }
+.EasyMDEContainer .CodeMirror-selected { background: rgba(189,147,249,.25); }
+.EasyMDEContainer .CodeMirror-gutters {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+}
+.EasyMDEContainer .CodeMirror-linenumber { color: var(--subtle); }
+.EasyMDEContainer .editor-statusbar {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+}
+.EasyMDEContainer .editor-preview,
+.EasyMDEContainer .editor-preview-side {
+  background: var(--surface-2);
+  color: var(--text);
+}
+.EasyMDEContainer .editor-preview a { color: var(--purple); }
+.EasyMDEContainer .editor-preview h1,
+.EasyMDEContainer .editor-preview h2,
+.EasyMDEContainer .editor-preview h3 { color: var(--text); }
+

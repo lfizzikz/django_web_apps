@@ -1,0 +1,50 @@
+{% extends "home/layout.html" %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'home/css/index.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <section class="hero">
+    <h1 class="title">My Django Projects</h1>
+    <p class="subtitle">A simple listing for projects I’m building with Django.</p>
+  </section>
+
+  <div class="apps-header">
+    <h2 class="apps-title">Apps</h2>
+  </div>
+
+  <section class="app-grid">
+    <a class="app-card" href="{% url 'todo:index' %}">
+      <div class="app-icon">✅</div>
+      <h3 class="app-name">Todo</h3>
+      <p class="app-desc">Tasks - with due dates.</p>
+      <div class="app-actions">
+        <span class="badge badge-green">Productivity</span>
+        <span class="badge badge-blue">Django</span>
+      </div>
+    </a>
+
+    <a class="app-card" href="{% url 'notes:index' %}">
+      <div class="app-icon">📝</div>
+      <h3 class="app-name">Notes</h3>
+      <p class="app-desc">Notes app - with markdown editor.</p>
+      <div class="app-actions">
+        <span class="badge badge-green">Productivity</span>
+        <span class="badge badge-yellow">Django</span>
+      </div>
+    </a>
+
+    <a class="app-card" href="#">
+      <div class="app-icon">➕</div>
+      <h3 class="app-name">Add Another</h3>
+      <p class="app-desc">Use this as a starting point for new links.</p>
+      <div class="app-actions">
+        <span class="badge">Custom</span>
+      </div>
+    </a>
+  </section>
+</div>
+{% endblock %}

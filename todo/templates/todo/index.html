@@ -20,7 +20,8 @@
 {% block body %}
   <header class="app-header">
     <div class="container py-3 d-flex align-items-center justify-content-between">
-      <h1 class="h4 mb-0 app-title">My Tasks</h1>
+      <div style="width: 100px;"></div>
+      <h1 class="h1 mb-0 app-title text-center flex-grow-1">My Tasks</h1>
       <button class="btn btn-primary btn-icon" data-bs-toggle="modal" data-bs-target="#addTaskModal">
         <span>+ Add Task</span>
       </button>
@@ -29,6 +30,11 @@
 
   <main class="container py-4">
     {% if tasks %}
+      <div class="filter-bar">
+        <span class="chip active" data-filter="all">All</span>
+        <span class="chip" data-filter="active">Active</span>
+        <span class="chip" data-filter="completed">Completed</span>
+      </div>
       <div class="tasks-card shadow-sm">
         <ul class="list-group list-group-flush">
           {% for task in tasks %}
@@ -128,6 +134,26 @@
           errorText.classList.add("d-none");
           this.classList.remove("is-invalid");
         }
+      });
+      // Simple client-side filter
+      const chips = document.querySelectorAll('.chip');
+      const items = document.querySelectorAll('.task-item');
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          chips.forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          const filter = chip.getAttribute('data-filter');
+          items.forEach(li => {
+            const done = li.classList.contains('is-done');
+            if (filter === 'all') {
+              li.classList.remove('d-none');
+            } else if (filter === 'active') {
+              li.classList.toggle('d-none', done);
+            } else if (filter === 'completed') {
+              li.classList.toggle('d-none', !done);
+            }
+          });
+        });
       });
     });
   </script>
